@@ -3,7 +3,7 @@ cls
 echo ----------------------------------------
 ECHO    batch for nrfutil - P8 (batchScript)
 ECHO    Back to Dafit Stock FW
-ECHO    by dapgo20201222 
+ECHO    by dapgo20201223 
 ECHO    https://github.com/dapgo/
 echo ----------------------------------------
 
@@ -20,8 +20,8 @@ IF %V_DEBUG% GTR 0  ECHO Debug1: Run from batch folder:  %CD%
 echo -----------------------------
 ECHO 1) Launch nrfutil help+version
 ECHO 2) Launch nrfutil keys generate
-ECHO 3) Launch nrfutil pkg generate
-ECHO 4) free
+ECHO 3) Launch nrfutil pkg generate (p8b TIN5)
+ECHO 4) Launch nrfutil pkg generate (p8a TFK5)
 ECHO 5) free
 ECHO 6) Clear Screen/history
 ECHO 7) Quit
@@ -59,37 +59,59 @@ GOTO FIN
 REM ************** SECTION 3 **********
 @echo off
 ECHO **********  ************
-SET V_FILE1=MOY-TIN5-1.8.2.bin
-SET V_FILE2=myprivate.key
-SET V_FILE3=p8stock_tin5.zip
+SET V_FILE1_IN=MOY-TIN5-1.8.2.bin
+SET V_FILE2_IN=myprivate.key
+SET V_FILE3_OUT=p8stock_tin5.zip
 SET V_HW=52
 SET V_SD_FWID=0x9D
 
-
 IF %V_DEBUG% GTR 0 (
 	ECHO ****Parameters for next command:
-	ECHO V_FILE1=%V_FILE1%
-	ECHO V_FILE2=%V_FILE2%
-	ECHO V_FILE3=%V_FILE3%
+	ECHO V_FILE1_IN=%V_FILE1_IN%
+	ECHO V_FILE2_IN=%V_FILE2_IN%
+	ECHO V_FILE3_OUT=%V_FILE3_OUT%
 	ECHO V_HW=%V_HW%
 	ECHO V_SD_FWID=%V_SD_FWID%
 )
 
 ECHO "** Check the param values and continue or cancel/close **"
 pause 
+IF %V_DEBUG% GTR 0 ECHO ON
 
-IF %V_DEBUG% GTR 0 ECHO ECHO ON
-
-nrfutil.exe -v pkg generate --hw-version %V_HW% --application-version 1 --application %V_FILE1% --sd-req %V_SD_FWID% --key-file %V_FILE2% %V_FILE3%
+nrfutil.exe -v pkg generate --hw-version %V_HW% --application-version 1 --application %V_FILE1_IN% --sd-req %V_SD_FWID% --key-file %V_FILE2_IN% %V_FILE3_OUT%
 
 @echo off
-
+ECHO "Now you have to flash the generated ZIP, for OTA use Daflasher (Android)"
 pause
 GOTO FIN
 
 :SECTION4
 REM ************** SECTION 4 **********
-ECHO ******* EMPTY *******
+@echo off
+ECHO **********  ************
+SET V_FILE1_IN=MOY-TFK5-1.7.7.bin
+SET V_FILE2_IN=myprivate.key
+SET V_FILE3_OUT=p8stock_tfk5.zip
+SET V_HW=52
+SET V_SD_FWID=0x9D
+
+IF %V_DEBUG% GTR 0 (
+	ECHO ****Parameters for next command:
+	ECHO V_FILE1_IN=%V_FILE1_IN%
+	ECHO V_FILE2_IN=%V_FILE2_IN%
+	ECHO V_FILE3_OUT=%V_FILE3_OUT%
+	ECHO V_HW=%V_HW%
+	ECHO V_SD_FWID=%V_SD_FWID%
+)
+
+ECHO "** Check the param values and continue or cancel/close **"
+pause 
+IF %V_DEBUG% GTR 0 ECHO ON
+
+nrfutil.exe -v pkg generate --hw-version %V_HW% --application-version 1 --application %V_FILE1_IN% --sd-req %V_SD_FWID% --key-file %V_FILE2_IN% %V_FILE3_OUT%
+
+@echo off
+ECHO "Now you have to flash the generated ZIP, for OTA use Daflasher (Android)"
 pause
 GOTO FIN
 
